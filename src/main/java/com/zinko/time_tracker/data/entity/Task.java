@@ -19,7 +19,7 @@ public class Task {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Record> records;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

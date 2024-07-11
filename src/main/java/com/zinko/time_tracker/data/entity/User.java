@@ -37,6 +37,6 @@ public class User {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Record> records;
 }
