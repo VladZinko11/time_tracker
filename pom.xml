@@ -20,6 +20,7 @@
         <postgresql.version>42.7.3</postgresql.version>
         <lombok.version>1.18.32</lombok.version>
         <jakarta.version>3.0.0</jakarta.version>
+        <mapstruct.version>1.6.0.Beta1</mapstruct.version>
     </properties>
     <dependencies>
         <dependency>
@@ -74,14 +75,25 @@
             <artifactId>tomcat-embed-jasper</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>10.15.2</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.6.0.Beta1</version>
+            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>1.6.0.Beta1</version>
+            <version>${mapstruct.version}</version>
         </dependency>
     </dependencies>
 
