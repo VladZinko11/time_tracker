@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDtoCreate implements Serializable {
+public class UserCreateDto implements Serializable {
     @Email(regexp = ".+[@].+[\\.].+")
     @NotBlank(message = "enter your email")
     String email;
