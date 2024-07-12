@@ -1,18 +1,17 @@
 package com.zinko.time_tracker.service;
 
 import com.zinko.time_tracker.service.dto.UserDto;
-import com.zinko.time_tracker.service.dto.UserDtoCreate;
+import com.zinko.time_tracker.service.dto.UserCreateDto;
 
 import java.util.List;
 
 public interface UserService {
-    UserDto create(UserDtoCreate userDtoCreate);
+    UserDto create(UserCreateDto userCreateDto);
 
-    UserDto get(Long id);
+    UserDto getById(Long id);
 
     List<UserDto> getAll();
 
-    List<UserDto> getByProjectId(Long id);
 
     UserDto update(UserDto userDto);
 

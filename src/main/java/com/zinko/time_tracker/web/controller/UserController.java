@@ -1,9 +1,12 @@
-package com.zinko.time_tracker.web.rest;
+package com.zinko.time_tracker.web.controller;
 
+import com.zinko.time_tracker.service.ErrorService;
 import com.zinko.time_tracker.service.UserService;
 import com.zinko.time_tracker.service.dto.UserDto;
-import com.zinko.time_tracker.service.dto.UserDtoCreate;
+import com.zinko.time_tracker.service.dto.UserCreateDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,13 +14,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-public class UserRestController {
+public class UserController {
 
     private final UserService userService;
+    private final ErrorService errorService;
 
     @GetMapping("/{id}")
     public UserDto get(@PathVariable Long id) {
-        return userService.get(id);
+        return userService.getById(id);
     }
 
     @GetMapping("/all")
@@ -26,8 +30,9 @@ public class UserRestController {
     }
 
     @PostMapping("/create")
-    public UserDto create(UserDtoCreate userDtoCreate) {
-        return userService.create(userDtoCreate);
+    public UserDto create(@RequestBody @Valid UserCreateDto userCreateDto, Errors errors) {
+        errorService.checkErrors(errors);
+        return userService.create(userCreateDto);
     }
 
     @DeleteMapping("/{id}")
@@ -36,12 +41,9 @@ public class UserRestController {
     }
 
     @PutMapping("/update")
-    public UserDto update(@RequestBody UserDto userDto) {
+    public UserDto update(@RequestBody @Valid UserDto userDto, Errors errors) {
+        errorService.checkErrors(errors);
         return userService.update(userDto);
     }
 
-    @GetMapping("/project/{id}")
-    public List<UserDto> getByProject(@PathVariable Long id) {
-        return userService.getByProjectId(id);
-    }
 }
