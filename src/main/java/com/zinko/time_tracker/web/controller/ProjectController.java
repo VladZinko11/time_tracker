@@ -5,14 +5,12 @@ import com.zinko.time_tracker.service.ProjectService;
 import com.zinko.time_tracker.service.dto.ProjectDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +21,14 @@ public class ProjectController {
     private final ErrorService errorService;
 
     @PostMapping("/create")
-    public ProjectDto create(@RequestBody @Valid ProjectDto projectDto, Errors errors) {
+    public ProjectDto create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid ProjectDto projectDto, Errors errors) {
         errorService.checkErrors(errors);
-        return projectService.create(projectDto);
+        return projectService.create(projectDto, userDetails.getUsername());
+    }
+
+    @GetMapping("/my-projects")
+    public List<ProjectDto> getProjectsByUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return projectService.getByUserEmail(userDetails.getUsername());
     }
 
     @GetMapping("/{id}")
@@ -34,7 +37,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Long id) {
-        projectService.delete(id);
+    public void delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+        projectService.delete(id, userDetails.getUsername());
     }
 }

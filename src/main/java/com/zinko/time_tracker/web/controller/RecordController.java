@@ -3,38 +3,36 @@ package com.zinko.time_tracker.web.controller;
 import com.zinko.time_tracker.service.RecordService;
 import com.zinko.time_tracker.service.dto.RecordDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("records")
+@RequestMapping("/api/records")
 public class RecordController {
     private final RecordService recordService;
 
-    @PostMapping("/create")
-    public RecordDto create(@RequestBody RecordDto recordDto) {
-        return recordService.create(recordDto);
+    @PostMapping("/task/{id}/start-record")
+    public RecordDto startRecord(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, @RequestBody RecordDto recordDto) {
+        return recordService.create(userDetails.getUsername(), id, recordDto);
     }
 
-    @GetMapping("/{id}")
-    public RecordDto getById(@PathVariable Long id) {
-        return recordService.getById(id);
+    @PostMapping("/task/finish-record")
+    public RecordDto finishRecord(@AuthenticationPrincipal UserDetails userDetails, @RequestBody RecordDto recordDto) {
+        return recordService.finishRecord(userDetails.getUsername(), recordDto);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        recordService.delete(id);
+    @GetMapping("/my-records")
+    public List<RecordDto> getRecords(@AuthenticationPrincipal UserDetails userDetails) {
+        return recordService.getRecordsByUserEmail(userDetails.getUsername());
     }
 
-    @PutMapping("/update")
-    public RecordDto update(@RequestBody RecordDto recordDto) {
-        return recordService.update(recordDto);
+    @GetMapping("/task/{id}/records")
+    public List<RecordDto> getRecords(@PathVariable Long id) {
+        return recordService.getRecordsByTaskId(id);
     }
+
 }
