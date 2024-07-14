@@ -4,6 +4,5 @@ CREATE TABLE records
     task_id     BIGINT REFERENCES tasks,
     user_id     BIGINT REFERENCES users,
     start_time  TIMESTAMP WITHOUT TIME ZONE,
-    finish_time TIMESTAMP WITHOUT TIME ZONE,
-    time        BIGINT
+    finish_time TIMESTAMP WITHOUT TIME ZONE
 );
