@@ -1,4 +1,4 @@
-package com.zinko.time_tracker.service;
+package com.zinko.time_tracker.service.mapper;
 
 import com.zinko.time_tracker.data.entity.Task;
 import com.zinko.time_tracker.service.dto.TaskDto;
