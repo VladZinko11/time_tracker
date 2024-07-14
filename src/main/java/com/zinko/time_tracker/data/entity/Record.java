@@ -30,7 +30,5 @@ public class Record {
     @Column(name = "finish_time")
     private LocalDateTime finishTime;
 
-    @Column(name = "time")
-    private Long time;
 
 }
