@@ -17,5 +17,7 @@ public class RecordDto {
     private Long id;
     private LocalDateTime finishTime;
     private LocalDateTime startTime;
+    private Integer time;
     private TaskDto task;
+
 }

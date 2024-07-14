@@ -24,6 +24,6 @@ public class UserDto implements Serializable {
     @Email(regexp = ".+[@].+[\\.].+")
     private String email;
     private Role role;
-    private ProjectDto project;
+    private List<ProjectDto> projects;
     private List<RecordDto> records;
 }
