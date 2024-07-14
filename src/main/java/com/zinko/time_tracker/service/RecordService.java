@@ -2,12 +2,14 @@ package com.zinko.time_tracker.service;
 
 import com.zinko.time_tracker.service.dto.RecordDto;
 
+import java.util.List;
+
 public interface RecordService {
-    RecordDto create(RecordDto recordDto);
+    RecordDto create(String userEmail, Long taskId, RecordDto recordDto);
 
-    RecordDto getById(Long id);
+    List<RecordDto> getRecordsByTaskId(Long taskId);
 
-    void delete(Long id);
+    List<RecordDto> getRecordsByUserEmail(String userEmail);
 
-    RecordDto update(RecordDto recordDto);
+    RecordDto finishRecord(String userEmail, RecordDto recordDto);
 }
