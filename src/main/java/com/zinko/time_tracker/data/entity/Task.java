@@ -20,6 +20,7 @@ public class Task {
     private String name;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy("id")
     private List<Record> records;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
