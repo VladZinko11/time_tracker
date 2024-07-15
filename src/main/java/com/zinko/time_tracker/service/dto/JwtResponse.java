@@ -1,4 +1,4 @@
-package com.zinko.time_tracker.service;
+package com.zinko.time_tracker.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
