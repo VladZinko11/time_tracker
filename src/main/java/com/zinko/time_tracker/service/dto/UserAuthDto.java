@@ -10,13 +10,11 @@ import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 
-/**
- * DTO for {@link com.zinko.time_tracker.data.entity.User}
- */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCreateDto implements Serializable {
+public class UserAuthDto implements Serializable {
     @Email(regexp = ".+[@].+[\\.].+")
     @NotBlank(message = "enter your email")
     String email;
