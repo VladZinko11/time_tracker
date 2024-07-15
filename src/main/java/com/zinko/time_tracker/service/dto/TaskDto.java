@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for {@link com.zinko.time_tracker.data.entity.Task}
- */
 
 @Data
 @AllArgsConstructor

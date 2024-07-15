@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * DTO for {@link com.zinko.time_tracker.data.entity.Record}
- */
 
 @Data
 @AllArgsConstructor

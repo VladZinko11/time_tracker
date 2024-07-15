@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * DTO for {@link com.zinko.time_tracker.data.entity.User}
- */
 
 @Data
 @AllArgsConstructor
