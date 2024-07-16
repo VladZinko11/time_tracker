@@ -1,5 +1,6 @@
-package com.zinko.time_tracker;
+package com.zinko.time_tracker.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zinko.time_tracker.service.UserService;
 import com.zinko.time_tracker.web.filter.AuthFilter;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -40,6 +43,8 @@ public class SecurityConfig {
                     configuration.setAllowCredentials(true);
                     return new CorsConfiguration();
                 }))
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint()
+                ).accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/projects/create", "/api/projects/delete/*",
@@ -51,6 +56,21 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new RestAuthenticationEntryPoint(objectMapper());
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new RestAccessDeniedHandler(objectMapper());
     }
 
     @Bean
