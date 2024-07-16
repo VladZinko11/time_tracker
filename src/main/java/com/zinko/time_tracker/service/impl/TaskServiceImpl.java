@@ -2,11 +2,13 @@ package com.zinko.time_tracker.service.impl;
 
 import com.zinko.time_tracker.data.entity.Project;
 import com.zinko.time_tracker.data.entity.Task;
-import com.zinko.time_tracker.data.repository.ProjectRepository;
 import com.zinko.time_tracker.data.repository.TaskRepository;
+import com.zinko.time_tracker.service.ProjectService;
 import com.zinko.time_tracker.service.TaskService;
+import com.zinko.time_tracker.service.dto.ProjectDto;
 import com.zinko.time_tracker.service.dto.TaskDto;
 import com.zinko.time_tracker.service.exception.NotFoundException;
+import com.zinko.time_tracker.service.mapper.ProjectMapper;
 import com.zinko.time_tracker.service.mapper.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,14 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
-    private final ProjectRepository projectRepository;
+    private final ProjectService projectService;
+    private final ProjectMapper projectMapper;
 
     @Override
     public TaskDto create(Long projectId, TaskDto taskDto) {
         Task task = taskMapper.toTask(taskDto);
-        Optional<Project> optionalProject = projectRepository.findById(projectId);
-        Project project = optionalProject.orElseThrow(
-                () -> new NotFoundException("Not found project with id: " + projectId));
+        ProjectDto projectDto = projectService.getById(projectId);
+        Project project = projectMapper.toProject(projectDto);
         task.setProject(project);
         taskRepository.save(task);
         return taskMapper.toDto(task);
@@ -51,11 +53,18 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDto> getByProjectId(Long projectId) {
-        if (!projectRepository.existsById(projectId)) {
+        if (!projectService.existsById(projectId)) {
             throw new NotFoundException("Not found project with id: " + projectId);
         }
         List<Task> tasks = taskRepository.findByProjectId(projectId);
-        return tasks.stream().map(taskMapper::toDto).toList();
+        return tasks.stream()
+                .map(taskMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public boolean existsById(Long taskId) {
+        return taskRepository.existsById(taskId);
     }
 }
 

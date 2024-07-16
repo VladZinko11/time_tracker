@@ -12,4 +12,8 @@ public interface ProjectService {
     ProjectDto getById(Long id);
 
     List<ProjectDto> getByUserEmail(String userEmail);
+
+    void addUser(Long projectId, Long userId);
+
+    boolean existsById(Long projectId);
 }

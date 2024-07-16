@@ -6,8 +6,10 @@ import com.zinko.time_tracker.data.repository.ProjectRepository;
 import com.zinko.time_tracker.service.ProjectService;
 import com.zinko.time_tracker.service.UserService;
 import com.zinko.time_tracker.service.dto.ProjectDto;
+import com.zinko.time_tracker.service.dto.UserDto;
 import com.zinko.time_tracker.service.exception.NotFoundException;
 import com.zinko.time_tracker.service.mapper.ProjectMapper;
+import com.zinko.time_tracker.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Override
     public ProjectDto create(ProjectDto projectDto, String userEmail) {
@@ -43,7 +46,26 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectDto> getByUserEmail(String userEmail) {
         User user = userService.getByEmail(userEmail);
         List<Project> projects = projectRepository.findByUserCreator(user);
-        return projects.stream().map(projectMapper::toDto).toList();
+        return projects.stream()
+                .map(projectMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public void addUser(Long projectId, Long userId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        Project project = optionalProject.orElseThrow(NotFoundException::new);
+        UserDto userDto = userService.getById(userId);
+        List<User> users = project.getUsers();
+        users.add(userMapper.toUser(userDto));
+        project.setUsers(users);
+        projectRepository.save(project);
+
+    }
+
+    @Override
+    public boolean existsById(Long projectId) {
+        return projectRepository.existsById(projectId);
     }
 
     @Override

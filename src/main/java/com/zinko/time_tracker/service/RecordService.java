@@ -5,7 +5,7 @@ import com.zinko.time_tracker.service.dto.RecordDto;
 import java.util.List;
 
 public interface RecordService {
-    RecordDto create(String userEmail, Long taskId, RecordDto recordDto);
+    RecordDto create(String userEmail, Long taskId);
 
     List<RecordDto> getRecordsByTaskId(Long taskId);
 

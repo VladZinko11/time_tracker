@@ -12,4 +12,6 @@ public interface TaskService {
     void delete(Long id);
 
     List<TaskDto> getByProjectId(Long projectId);
+
+    boolean existsById(Long taskId);
 }
