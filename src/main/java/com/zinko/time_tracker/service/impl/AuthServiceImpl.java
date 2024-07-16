@@ -3,10 +3,10 @@ package com.zinko.time_tracker.service.impl;
 import com.zinko.time_tracker.data.entity.Role;
 import com.zinko.time_tracker.data.entity.User;
 import com.zinko.time_tracker.service.AuthService;
-import com.zinko.time_tracker.service.JwtResponse;
 import com.zinko.time_tracker.service.JwtService;
 import com.zinko.time_tracker.service.UserService;
-import com.zinko.time_tracker.service.dto.UserCreateDto;
+import com.zinko.time_tracker.service.dto.JwtResponse;
+import com.zinko.time_tracker.service.dto.UserAuthDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,11 +22,10 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-
-    public JwtResponse signUp(UserCreateDto userCreateDto) {
+    public JwtResponse signUp(UserAuthDto userAuthDto) {
         User user = User.builder()
-                .email(userCreateDto.getEmail())
-                .password(passwordEncoder.encode(userCreateDto.getPassword()))
+                .email(userAuthDto.getEmail())
+                .password(passwordEncoder.encode(userAuthDto.getPassword()))
                 .role(Role.ROLE_EMPLOYEE)
                 .build();
         userService.create(user);
@@ -36,11 +35,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public JwtResponse signIn(UserCreateDto userCreateDto) {
+    public JwtResponse signIn(UserAuthDto userAuthDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                userCreateDto.getEmail(), userCreateDto.getPassword()));
+                userAuthDto.getEmail(), userAuthDto.getPassword()));
 
-        User user = (User) userService.userDetailsService().loadUserByUsername(userCreateDto.getEmail());
+        User user = (User) userService.userDetailsService().loadUserByUsername(userAuthDto.getEmail());
         String token = jwtService.generateToken(user);
         return new JwtResponse(token);
     }
