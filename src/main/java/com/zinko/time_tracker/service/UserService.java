@@ -2,6 +2,7 @@ package com.zinko.time_tracker.service;
 
 import com.zinko.time_tracker.data.entity.User;
 import com.zinko.time_tracker.service.dto.UserDto;
+import com.zinko.time_tracker.service.dto.UserUpdateDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -13,7 +14,7 @@ public interface UserService {
     UserDto getById(Long id);
 
 
-    UserDto update(UserDto userDto, UserDetails userDetails);
+    UserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails);
 
     void delete(UserDetails userDetails);
 

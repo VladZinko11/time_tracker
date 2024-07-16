@@ -4,8 +4,8 @@ import com.zinko.time_tracker.data.entity.User;
 import com.zinko.time_tracker.data.repository.UserRepository;
 import com.zinko.time_tracker.service.UserService;
 import com.zinko.time_tracker.service.dto.UserDto;
+import com.zinko.time_tracker.service.dto.UserUpdateDto;
 import com.zinko.time_tracker.service.exception.BadCredentialsException;
-import com.zinko.time_tracker.service.exception.NotAuthorityException;
 import com.zinko.time_tracker.service.exception.NotFoundException;
 import com.zinko.time_tracker.service.exception.ServerErrorException;
 import com.zinko.time_tracker.service.mapper.UserMapper;
@@ -45,31 +45,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getByProjectId(Long id) {
         List<User> users = userRepository.findByProjectId(id);
-        return users.stream().map(userMapper::toDto).toList();
+        return users.stream()
+                .map(userMapper::toDto)
+                .toList();
     }
 
     @Override
-    public UserDto update(UserDto userDto, UserDetails userDetails) {
-        emailValidate(userDto);
-        User user = userMapper.toUser(userDto);
-        if (userDto.getEmail().equals(userDetails.getUsername())) {
-            user.setPassword(userDetails.getPassword());
-        } else {
-            throw new NotAuthorityException("You can not do update foreign accounts");
-        }
+    public UserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDetails.getUsername());
+        User user = optionalUser.orElseThrow(ServerErrorException::new);
+        user.setFirstName(userUpdateDto.getFirstName());
+        user.setLastName(userUpdateDto.getLastName());
         userRepository.save(user);
         return userMapper.toDto(user);
-    }
-
-    private void emailValidate(UserDto userDto) {
-        Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (!user.getId().equals(userDto.getId())) {
-                throw new BadCredentialsException("User with email: "
-                        + userDto.getEmail() + " is already exist");
-            }
-        }
     }
 
     @Override

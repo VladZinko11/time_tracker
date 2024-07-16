@@ -3,6 +3,7 @@ package com.zinko.time_tracker.web.controller;
 import com.zinko.time_tracker.service.ErrorService;
 import com.zinko.time_tracker.service.UserService;
 import com.zinko.time_tracker.service.dto.UserDto;
+import com.zinko.time_tracker.service.dto.UserUpdateDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,8 +37,8 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public UserDto update(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid UserDto userDto, Errors errors) {
+    public UserDto update(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid UserUpdateDto userUpdateDto, Errors errors) {
         errorService.checkErrors(errors);
-        return userService.update(userDto, userDetails);
+        return userService.update(userUpdateDto, userDetails);
     }
 }
