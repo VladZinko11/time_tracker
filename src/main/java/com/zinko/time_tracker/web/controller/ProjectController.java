@@ -26,6 +26,11 @@ public class ProjectController {
         return projectService.create(projectDto, userDetails.getUsername());
     }
 
+    @PutMapping("/{projectId}/user/{userId}")
+    public void addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        projectService.addUser(projectId, userId);
+    }
+
     @GetMapping("/my-projects")
     public List<ProjectDto> getProjectsByUser(@AuthenticationPrincipal UserDetails userDetails) {
         return projectService.getByUserEmail(userDetails.getUsername());
