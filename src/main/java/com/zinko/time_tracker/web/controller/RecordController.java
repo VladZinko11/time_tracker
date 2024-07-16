@@ -16,8 +16,8 @@ public class RecordController {
     private final RecordService recordService;
 
     @PostMapping("/task/{id}/start-record")
-    public RecordDto startRecord(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, @RequestBody RecordDto recordDto) {
-        return recordService.create(userDetails.getUsername(), id, recordDto);
+    public RecordDto startRecord(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+        return recordService.create(userDetails.getUsername(), id);
     }
 
     @PostMapping("/task/finish-record")
